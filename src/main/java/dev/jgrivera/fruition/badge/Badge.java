@@ -1,4 +1,4 @@
 package dev.jgrivera.fruition.badge;
 
-public record Badge(String name) {
+public record Badge(String id, String name) {
 }
