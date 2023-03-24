@@ -19,8 +19,15 @@ public class MockWebApplicationTest {
     private MockMvc mvc;
 
     @Test
+    public void should_get_badges() throws Exception {
+        mvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name", is("Test badge!")));
+    }
+
+    @Test
     public void should_get_badge() throws Exception {
-        mvc.perform(get("/badge"))
+        mvc.perform(get("/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name", is("Test badge!")));
     }
