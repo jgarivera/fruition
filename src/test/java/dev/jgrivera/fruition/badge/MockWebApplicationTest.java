@@ -1,5 +1,6 @@
 package dev.jgrivera.fruition.badge;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,19 +17,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class MockWebApplicationTest {
     @Autowired
-    private MockMvc mvc;
+    private MockMvc mockMvc;
 
-    @Test
-    public void should_get_badges() throws Exception {
-        mvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is("Test badge!")));
+    @Autowired
+    private BadgeRepository repository;
+
+    @BeforeEach
+    public void beforeEach() {
+        repository.deleteAll();
     }
 
     @Test
-    public void should_get_badge() throws Exception {
-        mvc.perform(get("/1"))
+    public void it_gets_badges() throws Exception {
+        Badge badge1 = repository.save(new Badge("Example badge 1"));
+        Badge badge2 = repository.save(new Badge("Example badge 2"));
+
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("name", is("Test badge!")));
+                .andExpect(jsonPath("$[0].id", is(String.valueOf(badge1.getId()))))
+                .andExpect(jsonPath("$[0].name", is(badge1.getName())))
+                .andExpect(jsonPath("$[1].id", is(String.valueOf(badge2.getId()))))
+                .andExpect(jsonPath("$[1].name", is(badge2.getName())));
+    }
+
+    @Test
+    public void it_gets_badge() throws Exception {
+        Badge badge = repository.save(new Badge("Example badge"));
+        String id = String.valueOf(badge.getId());
+        String name = badge.getName();
+
+        mockMvc.perform(get("/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(id)))
+                .andExpect(jsonPath("$.name", is(name)));
     }
 }
