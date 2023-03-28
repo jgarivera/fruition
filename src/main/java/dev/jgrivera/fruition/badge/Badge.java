@@ -18,8 +18,7 @@ public class Badge {
     protected Badge() {
     }
 
-    public Badge(UUID id, String name) {
-        this.id = id;
+    public Badge(String name) {
         this.name = name;
     }
 
