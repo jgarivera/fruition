@@ -1,5 +1,6 @@
 package dev.jgrivera.fruition.badge;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +18,14 @@ public class BadgeController {
         this.repository = repository;
     }
 
-    @GetMapping("/")
+    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<Badge>> getBadges() {
         Iterable<Badge> badges = repository.findAll();
 
         return ResponseEntity.ok().body(badges);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Badge> getBadge(@PathVariable String id) {
         Optional<Badge> badge = repository.findById(UUID.fromString(id));
 
