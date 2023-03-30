@@ -23,7 +23,7 @@ public class MockWebApplicationTest {
     private BadgeRepository repository;
 
     @BeforeEach
-    public void beforeEach() {
+    public void setup() {
         repository.deleteAll();
     }
 
