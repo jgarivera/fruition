@@ -32,6 +32,13 @@ public class MockWebApplicationTest {
         Badge badge1 = repository.save(new Badge("Example badge 1"));
         Badge badge2 = repository.save(new Badge("Example badge 2"));
 
+        mockMvc.perform(get("/api/badges"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(String.valueOf(badge1.getId()))))
+                .andExpect(jsonPath("$[0].name", is(badge1.getName())))
+                .andExpect(jsonPath("$[1].id", is(String.valueOf(badge2.getId()))))
+                .andExpect(jsonPath("$[1].name", is(badge2.getName())));
+
         mockMvc.perform(get("/api/badges/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(String.valueOf(badge1.getId()))))
