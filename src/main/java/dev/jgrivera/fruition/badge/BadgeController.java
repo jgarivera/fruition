@@ -20,7 +20,7 @@ public class BadgeController {
         this.repository = repository;
     }
 
-    @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = {"", "/"}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<Badge>> getBadges() {
         Iterable<Badge> badges = repository.findAll();
 
