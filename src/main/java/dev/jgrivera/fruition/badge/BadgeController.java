@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/badges")
+@RequestMapping("/api/badges")
 public class BadgeController {
 
     private final BadgeRepository repository;
