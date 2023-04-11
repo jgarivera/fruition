@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Fruition Badges</title>
@@ -7,5 +7,22 @@
 
 <body>
 This is the home page of the badges feature.
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+
+    <tr th:if="${badges.isEmpty()}">
+        <td colspan="2">No badges found</td>
+    </tr>
+
+    <tr th:each="badge : ${badges}">
+        <td th:text="${badge.id}"></td>
+        <td th:text="${badge.name}"></td>
+    </tr>
+</table>
+
 </body>
 </html>
