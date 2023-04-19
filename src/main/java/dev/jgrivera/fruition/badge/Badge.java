@@ -1,6 +1,7 @@
 package dev.jgrivera.fruition.badge;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class Badge {
     private UUID id;
 
     @Column(nullable = false)
+    @NotBlank
     private String name;
 
     protected Badge() {
