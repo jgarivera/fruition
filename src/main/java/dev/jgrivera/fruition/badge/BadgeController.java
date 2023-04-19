@@ -1,12 +1,12 @@
 package dev.jgrivera.fruition.badge;
 
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +36,15 @@ public class BadgeController {
         } else {
             return ResponseEntity.ok().body(badge.get());
         }
+    }
+
+    @PostMapping(path = {"", "/"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> createBadge(@Valid @RequestBody Badge badge) {
+        repository.save(badge);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("message", "Successfully created badge");
+
+        return ResponseEntity.ok().body(map);
     }
 }
