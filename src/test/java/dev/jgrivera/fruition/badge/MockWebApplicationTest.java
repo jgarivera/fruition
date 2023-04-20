@@ -81,7 +81,7 @@ public class MockWebApplicationTest {
         mockMvc.perform(post("/api/badges").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
-        mockMvc.perform(post("/api/badges").content(body).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/badges/").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 }
