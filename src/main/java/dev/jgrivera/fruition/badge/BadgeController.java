@@ -47,4 +47,31 @@ public class BadgeController {
 
         return ResponseEntity.ok().body(map);
     }
+
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Badge> updateBadge(@PathVariable("id") String id, @Valid @RequestBody Badge updateBadge) {
+        Optional<Badge> optionalBadge = repository.findById(UUID.fromString(id));
+
+        if (optionalBadge.isPresent()) {
+            Badge badge = optionalBadge.get();
+            badge.setName(updateBadge.getName());
+
+            Badge updatedBadge = repository.save(badge);
+            return ResponseEntity.ok().body(updatedBadge);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Badge> deleteBadge(@PathVariable("id") String id) {
+        Optional<Badge> optionalBadge = repository.findById(UUID.fromString(id));
+
+        if (optionalBadge.isPresent()) {
+            repository.deleteById(UUID.fromString(id));
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
