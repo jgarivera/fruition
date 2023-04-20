@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,5 +84,52 @@ public class MockWebApplicationTest {
 
         mockMvc.perform(post("/api/badges/").content(body).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void it_updates_badge() throws Exception {
+        Badge badge = repository.save(new Badge("Example badge"));
+        String id = String.valueOf(badge.getId());
+        String body = "{\"name\": \"Updated badge\"}";
+
+        mockMvc.perform(put("/api/badges/{id}", id).content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Updated badge")));
+    }
+
+    @Test
+    public void it_validates_name_when_updating_badge() throws Exception {
+        Badge badge = repository.save(new Badge("Example badge"));
+        String id = String.valueOf(badge.getId());
+        String body = "{\"name\": \"\"}";
+
+        mockMvc.perform(put("/api/badges/{id}", id).content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void it_does_not_update_non_existent_badge() throws Exception {
+        String id = String.valueOf(UUID.randomUUID());
+        String body = "{\"name\": \"Updated badge\"}";
+
+        mockMvc.perform(put("/api/badges/{id}", id).content(body).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void it_deletes_badge() throws Exception {
+        Badge badge = repository.save(new Badge("Example badge"));
+        String id = String.valueOf(badge.getId());
+
+        mockMvc.perform(delete("/api/badges/{id}", id))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void it_does_not_delete_non_existent_badge() throws Exception {
+        String id = String.valueOf(UUID.randomUUID());
+
+        mockMvc.perform(delete("/api/badges/{id}", id))
+                .andExpect(status().isNotFound());
     }
 }
